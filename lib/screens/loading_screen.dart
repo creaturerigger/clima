@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:clima/services/location.dart';
+import 'package:http/http.dart';
+import 'package:clima/utilities/config.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -8,13 +10,26 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  late Position userPosition;
+  Position? userPosition;
+  Response? weatherResponse;
 
   void getLocation() async {
     await Location.getPosition();
     userPosition = Location.acquiredPosition;
-    print("Longitude: ${userPosition.longitude},"
-        " Latitude: ${userPosition.latitude}");
+    print("Longitude: ${userPosition?.longitude}, "
+        "Latitude: ${userPosition?.latitude}");
+  }
+
+  void getData(double? lat, double? lon, String apiKey) async {
+    Response response = await get(Uri.parse(
+        "https://api.openweathermap.org/data/2.5/weather?lat=${lat.toString()}&"
+        "lon=${lon.toString()}&appid=$apiKey"));
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
+      print(response.statusCode);
+      print(response.body);
+    }
   }
 
   Future<Position> _determinePosition() async {
@@ -48,6 +63,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void initState() {
     super.initState();
     getLocation();
+    var position = userPosition;
+
+    getData(position?.latitude, position?.longitude, kOpenWeatherApiKey);
   }
 
   @override
