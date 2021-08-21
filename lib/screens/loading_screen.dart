@@ -7,10 +7,12 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  void getLocation() async {
+  late Position userPosition;
+
+  Future<Position> getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    print(position);
+        desiredAccuracy: LocationAccuracy.low);
+    return position;
   }
 
   Future<Position> _determinePosition() async {
@@ -36,24 +38,22 @@ class _LoadingScreenState extends State<LoadingScreen> {
     }
 
     return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.lowest,
+      desiredAccuracy: LocationAccuracy.low,
     );
   }
 
   @override
+  void initState() {
+    super.initState();
+    _determinePosition().then((acquiredPosition) {
+      userPosition = acquiredPosition;
+      print(
+          "user position is obtained: ${userPosition.longitude}, ${userPosition.latitude}");
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          child: Text('Get Location'),
-          onPressed: () {
-            Future<Position> position = _determinePosition();
-            position.then((value) => print(value));
-            getLocation();
-            print('location is requested!');
-          },
-        ),
-      ),
-    );
+    return Scaffold();
   }
 }

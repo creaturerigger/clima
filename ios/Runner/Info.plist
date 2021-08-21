@@ -4,6 +4,13 @@
 <dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>ClimaApp needs your location to provide you with the weather information at your location.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>ClimaApp needs access to location when in the background.</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+		<key>weather</key>
+		<string>ClimaApp requires temporary access to the device&apos;s precise location.</string>
+	</dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
