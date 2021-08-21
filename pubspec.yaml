@@ -28,6 +28,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  geolocator: ^7.4.0
+  
 
 dev_dependencies:
   flutter_test:
@@ -45,13 +47,13 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/
+  - images/
 
   fonts:
-    - family: Spartan MB
+    - family: Spartan
       fonts:
-        - assets: fonts/SpartanMB-Black.otf
-            weight: 900
+        - asset: fonts/Spartan-Black.ttf
+          weight: 900
 
   # To add assets to your application, add an assets section, like this:
   # assets:
