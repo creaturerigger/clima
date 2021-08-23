@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:clima/services/location.dart';
-import 'package:http/http.dart';
+import 'package:clima/services/networking.dart';
 import 'package:clima/utilities/config.dart';
-import 'dart:convert';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -12,31 +11,17 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen> {
   late Position userPosition;
-  late Response weatherResponse;
+  late double latitude;
+  late double longitude;
 
-  Future<void> getLocation() async {
+  void getLocationData() async {
     await Location.getPosition();
     userPosition = Location.acquiredPosition;
-    print("Longitude: ${userPosition.longitude}, "
-        "Latitude: ${userPosition.latitude}");
-  }
-
-  Future<void> getData(double lat, double lon, String apiKey) async {
-    Response response = await get(Uri.parse(
-        "https://api.openweathermap.org/data/2.5/weather?lat=${lat.toString()}&"
-        "lon=${lon.toString()}&appid=$apiKey"));
-    if (response.statusCode == 200) {
-      String data = response.body;
-      Map<String, dynamic> jsonFormatted = jsonDecode(data);
-      int id = jsonFormatted["weather"][0]["id"];
-      double temp = jsonFormatted["main"]["temp"];
-      String cityName = jsonFormatted["name"];
-
-      print("The id of $cityName is ${id.toString()} and temperature is "
-          "${temp.toString()}");
-    } else {
-      print(response.statusCode);
-    }
+    latitude = userPosition.latitude;
+    longitude = userPosition.longitude;
+    NetworkHelper(
+        "https://api.openweathermap.org/data/2.5/weather?lat=${latitude.toString()}&"
+        "lon=${longitude.toString()}&appid=$kOpenWeatherApiKey");
   }
 
   Future<Position> _determinePosition() async {
@@ -66,16 +51,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
     );
   }
 
-  void loadData() async {
-    await getLocation();
-    var position = userPosition;
-    await getData(position.latitude, position.longitude, kOpenWeatherApiKey);
-  }
-
   @override
   void initState() {
     super.initState();
-    loadData();
+    getLocationData();
   }
 
   @override
