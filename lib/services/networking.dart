@@ -6,7 +6,7 @@ class NetworkHelper {
   final String url;
   NetworkHelper(this.url);
 
-  Future getData(double lat, double lon, String apiKey) async {
+  Future getData() async {
     Response response = await get(Uri.parse(url));
     if (response.statusCode == 200) {
       String data = response.body;
@@ -15,4 +15,6 @@ class NetworkHelper {
       print(response.statusCode);
     }
   }
+
+  
 }
