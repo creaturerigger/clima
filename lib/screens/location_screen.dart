@@ -70,7 +70,12 @@ class _LocationScreenState extends State<LocationScreen> {
                       Icons.near_me,
                       size: 50.0,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return CityScreen();
+                      }));
+                    },
                   ),
                   TextButton(
                     child: Icon(
